@@ -1,0 +1,20 @@
+1일차
+1. 스프링 부트 설정
+	- 오라클 driver / mysql driver
+
+2.  URL 구성 및 엔티티 , 레포지토리 설계
+3. 스프링 시큐리티를 이용한 회원가입 및 로그인 구현
+
+
+mysql 쓸 때 테이블 생성
+workbench
+root ->
+CREATE DATABASE boardProject;
+
+
+책 읽어보기
+객체지향의 사실과 오해
+--------
+라이브리로드
+Plugins
+Spring Boot Assistant 설치
