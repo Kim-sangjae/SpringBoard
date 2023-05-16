@@ -18,3 +18,11 @@ CREATE DATABASE boardProject;
 라이브리로드
 Plugins
 Spring Boot Assistant 설치
+
+
+//Interceptor
+boolean preHandle()
+ - 공통기능 + 통제기능
+
+void postHandle()
+void afterCompletion()
