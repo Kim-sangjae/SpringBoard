@@ -16,3 +16,12 @@
   - 기본 설정
   - 게시판 설정
 * <a href="https://drive.google.com/drive/folders/1Eu3wl9GIVdIxFUaxLTGVIAgqpr3ZsCZ0?usp=share_link">동영상 강의</a>
+
+## 3일차
+* 스프링 시큐리티 설정
+  - 로그인 양삭
+  - UserDetails, UserDetailsService 인터페이스 구현 클래스
+
+* 관리자 페이지
+  - 기본설정
+  - 

@@ -1,5 +1,8 @@
 package org.koreait.commons.validators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public interface PasswordValidator {
 
 
@@ -45,11 +48,18 @@ public interface PasswordValidator {
      * @param password
      * @return
      */
-    default boolean specialCharCheck(String password){
+//    default boolean specialCharCheck(String password){
+//
+//        //return password.matches("[`~!#$%\\^&\\*()-_+=]+");
+//
+//    return true;
+//    }
 
-        //return password.matches("[`~!#$%\\^&\\*()-_+=]+");
 
-    return true;
+    default boolean specialCharsCheck(String password) {
+        Pattern pattern = Pattern.compile("[`~!#$%\\^&\\*()-_+=]+");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.find();
     }
 
 
