@@ -1,6 +1,7 @@
 package org.koreait.models.member;
 
 import lombok.RequiredArgsConstructor;
+import org.koreait.commons.constants.Role;
 import org.koreait.controllers.members.JoinForm;
 import org.koreait.entities.Member;
 import org.koreait.repositories.MemberRepository;
@@ -23,6 +24,8 @@ public class MemberSaveService {
     public void save(JoinForm joinForm){
 
         Member member = new ModelMapper().map(joinForm , Member.class);
+        member.setRoles(Role.USER);  // Role값은 디폴트값으로 넣어놨지만 혹시몰라서 한번 더 설정한다
+
         member.setUserPw(passwordEncoder.encode(joinForm.getUserPw()));
 
         memberRepository.saveAndFlush(member);
