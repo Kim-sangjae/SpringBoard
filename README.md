@@ -48,7 +48,7 @@
 
 
 * 공통 오류 페이지
- - @ExceptionHandler , @ControllerAdvice , @
+  - @ExceptionHandler, @ControllerAdvice, @RestControllerAdvice
 
 * 관리자 페이지
   - 기본설정
