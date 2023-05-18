@@ -21,8 +21,7 @@ import java.io.IOException;
 @Configuration
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        //시큐리티 로그인
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/member/login")
                 .usernameParameter("userId")
@@ -34,32 +33,22 @@ public class SecurityConfig {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/member/login");
 
-
-        // 인가기능
         http.authorizeHttpRequests()
-                .requestMatchers("/mypage/**").authenticated() // 회원전용 url
-                .requestMatchers("/admin/**").hasAuthority("ADMIN") // 관리자 전용
-                .anyRequest().permitAll(); // 그 외 모든 페이지는 모든 회원이 접근가능
+                .requestMatchers("/mypage/**").authenticated() // 회원 전용
+               // .requestMatchers("/admin/**").hasAuthority("ADMIN") // 관리자 전용
+                .anyRequest().permitAll(); // 그외 모든 페이지는 모든 회원이 접근 가능
 
-
-
-        // 관리자와 유저 따로 페이지 이동시키기
         http.exceptionHandling()
-                .authenticationEntryPoint((req,res,e) ->{
+                .authenticationEntryPoint((req, res, e) -> {
                     String URI = req.getRequestURI();
 
-                    if(URI.indexOf("/admin") != -1){ // 관리자페이지
-                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED , "권한없음");
-                    } else { // 회원전용 페이지
+                    if (URI.indexOf("/admin") != -1) { // 관리자 페이지
+                        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "NOT AUTHORIZED");
+                    } else { // 회원 전용 페이지
                         String redirectURL = req.getContextPath() + "/member/login";
                         res.sendRedirect(redirectURL);
                     }
-
-
                 });
-
-
-
 
         http.headers().frameOptions().sameOrigin();
 
@@ -67,16 +56,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return w -> w.ignoring().requestMatchers("/css/**","/js/**","/images/**","/errors/**");
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return w -> w.ignoring().requestMatchers("/css/**", "/js/**", "/images/**", "/errors/**");
     }
-
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
 }

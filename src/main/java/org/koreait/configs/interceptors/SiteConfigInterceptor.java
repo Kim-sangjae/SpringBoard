@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-/*
-* 사이트 설정 유지
-* 사이트 전역에 공통부분으로 쓰이는 것들 설정
-* */
+/**
+ * 사이트 설정 유지
+ *
+ */
 @Component
 public class SiteConfigInterceptor implements HandlerInterceptor {
     @Override
@@ -18,7 +18,4 @@ public class SiteConfigInterceptor implements HandlerInterceptor {
 
         return true;
     }
-
-
-
 }

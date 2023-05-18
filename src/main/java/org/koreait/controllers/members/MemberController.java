@@ -12,29 +12,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/member")
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberSaveService saveService;
     private final JoinValidator joinValidator;
 
-
     @GetMapping("/join")
-    public String join(@ModelAttribute JoinForm joinForm , Model model){
-
-//        JoinForm joinForm = new JoinForm();
-//        model.addAttribute(joinForm);
+    public String join(@ModelAttribute JoinForm joinForm, Model model) {
 
         return "member/join";
     }
 
     @PostMapping("/join")
-    public String joinPs(@Valid JoinForm joinForm , Errors errors){
+    public String joinPs(@Valid JoinForm joinForm, Errors errors) {
 
-        joinValidator.validate(joinForm,errors);
+        joinValidator.validate(joinForm, errors);
 
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "member/join";
         }
 
@@ -43,13 +39,9 @@ public class MemberController {
         return "redirect:/member/login";
     }
 
-
     @GetMapping("/login")
-    public String login(){
+    public String login() {
 
         return "member/login";
     }
-
-
-
 }

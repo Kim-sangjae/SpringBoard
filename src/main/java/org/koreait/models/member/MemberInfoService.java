@@ -23,14 +23,12 @@ public class MemberInfoService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Member member = repository.findByUserId(username);
-
-
-        if(member == null){
+        if (member == null) {
             throw new UsernameNotFoundException(username);
         }
 
-        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(member.getRoles().toString()));
-
+        List<GrantedAuthority> authorities
+                = Arrays.asList(new SimpleGrantedAuthority(member.getRoles().toString()));
 
         return MemberInfo.builder()
                 .userNo(member.getUserNo())
@@ -44,7 +42,4 @@ public class MemberInfoService implements UserDetailsService {
                 .build();
 
     }
-
-
-
 }

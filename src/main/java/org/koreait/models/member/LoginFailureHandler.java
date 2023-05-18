@@ -12,7 +12,6 @@ import java.io.IOException;
 public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-
         HttpSession session = request.getSession();
         String userId = request.getParameter("userId");
         String userPw = request.getParameter("userPw");
@@ -22,35 +21,23 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         session.removeAttribute("requiredUserPw");
         session.removeAttribute("global");
 
-        session.setAttribute("userId",userId);
-
+        session.setAttribute("userId", userId);
 
         try {
-            if(userId == null || userId.isBlank()){
-                throw new LoginValidationException("requiredUserId","NotBlank.userId");
-            }
-            if(userPw == null || userPw.isBlank()){
-                throw new LoginValidationException("requiredUserPw","NotBlank.userPw");
+            if (userId == null || userId.isBlank()) {
+                throw new LoginValidationException("requiredUserId", "NotBlank.userId");
             }
 
-            throw new LoginValidationException("global","Validation.login.fail");
+            if (userPw == null || userPw.isBlank()) {
+                throw new LoginValidationException("requiredUserPw", "NotBlank.userPw");
+            }
 
-        }catch (LoginValidationException e){
-            session.setAttribute(e.getField(),e.getMessage());
+            throw new LoginValidationException("global", "Validation.login.fail");
+
+        } catch (LoginValidationException e) {
+            session.setAttribute(e.getField(), e.getMessage());
         }
 
-
-
-        // 실패하더라도 member/login 으로 이동은시킨다
-        response.sendRedirect(request.getContextPath()+"/member/login");
-
-
-
-
+        response.sendRedirect(request.getContextPath() + "/member/login");
     }
-
-
-
-
-
 }
