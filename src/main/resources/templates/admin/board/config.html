@@ -73,6 +73,7 @@
                     <label for="listAccessRole_ADMIN">전체(관리자)</label>
                 </td>
             </tr>
+
             <tr>
                 <th>글보기</th>
                 <td>
@@ -87,6 +88,7 @@
 
                 </td>
             </tr>
+
             <tr>
                 <th>글쓰기</th>
                 <td>
@@ -101,6 +103,7 @@
 
                 </td>
             </tr>
+
             <tr>
                 <th>댓글</th>
                 <td>
@@ -114,6 +117,7 @@
                     <label for="commentAccessRole_ADMIN">전체(관리자)</label>
                 </td>
             </tr>
+
             <tr>
                 <th>답글</th>
                 <td>
@@ -127,6 +131,32 @@
                     <label for="replyAccessRole_ADMIN">전체(관리자)</label>
                 </td>
             </tr>
+        </table>
+
+        <h2>기능 설정</h2>
+        <table class="table-cols">
+            <tr>
+                <th>에디터</th>
+                <td>
+                    <input type="radio" name="useEditor" value="true" id="useEditor_true">
+                    <label for="useEditor_true">사용</label>
+
+                    <input type="radio" name="useEditor" value="true" id="useEditor_false">
+                    <label for="useEditor_false">미사용</label>
+                </td>
+            </tr>
+
+            <tr>
+                <th>파일 첨부</th>
+                <td>
+                    <input type="radio" name="useAttachFile" value="true" id="useAttachFile_true">
+                    <label for="useAttachFile_true">사용</label>
+
+                    <input type="radio" name="useAttachFile" value="false" id="useAttachFile_false">
+                    <label for="useAttachFile_false">사용</label>
+                </td>
+            </tr>
+
         </table>
     </form>
 </section>
