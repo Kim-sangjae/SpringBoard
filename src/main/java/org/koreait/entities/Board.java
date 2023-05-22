@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.koreait.commons.constants.Role;
 
+import java.util.Arrays;
+
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board extends BaseMemberEntity{
+public class Board extends BaseMemberEntity {
     @Id
     @Column(length = 30)
     private String bId; // 게시판아이디
@@ -21,7 +23,7 @@ public class Board extends BaseMemberEntity{
     @Column(length = 60, nullable = false)
     private String bName; // 게시판명
 
-    @Column(name="isUse") // mysql 에서 use 는 예약어이기 떄문에 컬럼값을 다르게 사용한다
+    @Column(name = "isUse") // mysql 에서 use 는 예약어이기 떄문에 컬럼값을 다르게 사용한다
     private boolean use; // 게시판 사용여부
 
     private int rowsOfPage = 20; //1페이지당 게시글
@@ -64,7 +66,6 @@ public class Board extends BaseMemberEntity{
     private boolean useAttachImage;
 
 
-
     // 글작성 후 이동
     @Column(length = 10, nullable = false)
     private String locationAfterWriting = "view";
@@ -76,9 +77,30 @@ public class Board extends BaseMemberEntity{
 
 
     // 게시판 스킨
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String skin = "default";
+
+
+    /**
+     * 게시판 분류 목록(카테고리)
+     *
+     * @return
+     */
+    public String[] getCategories() {
+        if (category == null) {
+            return null;
+        }
+
+        String[] categories = category.replaceAll("\\r", "").trim().split("\\n");
+
+        return categories;
+    }
+
+
+
+
 
 
 
 }
+
