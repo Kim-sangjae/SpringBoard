@@ -46,7 +46,7 @@ public class BoardConfigInfoService {
 
 
 
-    public Board get(String bId,boolean isAdmin){
+    public Board get(String bId, boolean isAdmin){
         return get(bId,isAdmin,null);
     }
 
