@@ -82,7 +82,15 @@
 
 ## 6일차
 * 관리자페이지
-  - 게시판 설정
-    - Board : 게시판 설정 엔티티
+	- 게시판 설정
+		- Board : 게시판 설정 엔티티
+		- BoardData : 게시글 데이터
+
+	- 게시판 목록
+
+* 프론트페이지
+	- 게시글 쓰기
+	- 파일업로드
+* <a href="https://drive.google.com/drive/folders/12Jz7WuVcgG7epBAe3n_JQhdJ35GS39uN?usp=share_link">동영상 강의</a>
 
  
