@@ -78,4 +78,11 @@
 
 * <a href="https://drive.google.com/drive/folders/1BUuxfIcPO32JGlaC9XZ-Zd_kG7KZ3eaN?usp=share_link">동영상 강의</a>
 
+
+
+## 6일차
+* 관리자페이지
+  - 게시판 설정
+    - Board : 게시판 설정 엔티티
+
  
