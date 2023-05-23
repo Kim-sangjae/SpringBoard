@@ -65,32 +65,27 @@
 * <a href="https://drive.google.com/drive/folders/1zTuyIVdIy99BLSqrN5p1cDODtbmVUU7Q?usp=share_link">동영상 강의</a>
 
 
-
 ## 5일차
-
-* 관리자페이지
-  - 사이트 설정
-  - 게시판 설정
-    - 게시판 설정 == 게시판
-    - 게시판 데이터
-
-
+* 관리자페이지 
+	- 사이트 설정 
+	- 게시판 설정
 
 * <a href="https://drive.google.com/drive/folders/1BUuxfIcPO32JGlaC9XZ-Zd_kG7KZ3eaN?usp=share_link">동영상 강의</a>
 
-
-
 ## 6일차
-* 관리자페이지
-	- 게시판 설정
+* 관리자페이지 
+	- 게시판 설정 
 		- Board : 게시판 설정 엔티티
 		- BoardData : 게시글 데이터
-
+		
 	- 게시판 목록
-
-* 프론트페이지
-	- 게시글 쓰기
-	- 파일업로드
 * <a href="https://drive.google.com/drive/folders/12Jz7WuVcgG7epBAe3n_JQhdJ35GS39uN?usp=share_link">동영상 강의</a>
 
- 
+## 7일차
+* 관리자페이지 
+	- 게시판 목록 
+
+* 프론트페이지 
+	- 게시글 쓰기
+	- 파일업로드
+* <a href="https://drive.google.com/drive/folders/1jYTOep60XCkm0_B4M4MMkTdyKc76tgjQ?usp=share_link">동영상 강의</a>

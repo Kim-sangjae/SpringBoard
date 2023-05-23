@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.commons.CommonException;
 import org.koreait.commons.MenuDetail;
 import org.koreait.commons.Menus;
-import org.koreait.commons.constants.Role;
 import org.koreait.entities.Board;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardConfigListService;
@@ -25,12 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
 
-    private final BoardConfigSaveService configSaveService;
-
     private final HttpServletRequest request;
-
+    private final BoardConfigSaveService configSaveService;
     private final BoardConfigInfoService boardConfigInfoService;
-
     private final BoardConfigListService boardConfigListService;
 
     /**
@@ -39,37 +35,32 @@ public class BoardController {
      * @return
      */
     @GetMapping
-    public String index(@ModelAttribute BoardSearch boardSearch,Model model){
+    public String index(@ModelAttribute BoardSearch boardSearch, Model model) {
         commonProcess(model, "게시판 목록");
 
         Page<Board> data = boardConfigListService.gets(boardSearch);
         model.addAttribute("items", data.getContent());
 
-
         return "admin/board/index";
     }
-
-
-
 
     /**
      * 게시판 등록
      * @return
      */
     @GetMapping("/register")
-    public String register(@ModelAttribute BoardForm boardForm , Model model){
-        commonProcess(model,"게시판 등록");
+    public String register(@ModelAttribute BoardForm boardForm, Model model) {
+        commonProcess(model, "게시판 등록");
 
         return "admin/board/config";
     }
 
-
     @GetMapping("/{bId}/update")
-    public String update(@PathVariable String bId , Model model){
-        commonProcess(model,"게시판 수정");
+    public String update(@PathVariable String bId, Model model) {
+        commonProcess(model, "게시판 수정");
 
-        Board board = boardConfigInfoService.get(bId,true);
-        BoardForm boardForm = new ModelMapper().map(board,BoardForm.class);
+        Board board = boardConfigInfoService.get(bId, true);
+        BoardForm boardForm = new ModelMapper().map(board, BoardForm.class);
         boardForm.setMode("update");
         boardForm.setListAccessRole(board.getListAccessRole().toString());
         boardForm.setViewAccessRole(board.getViewAccessRole().toString());
@@ -77,28 +68,23 @@ public class BoardController {
         boardForm.setReplyAccessRole(board.getReplyAccessRole().toString());
         boardForm.setCommentAccessRole(board.getCommentAccessRole().toString());
 
-        model.addAttribute("boardForm",boardForm);
+        model.addAttribute("boardForm", boardForm);
 
         return "admin/board/config";
     }
 
-
-
     @PostMapping("/save")
-    public String save(@Valid BoardForm boardForm, Errors errors, Model model){
+    public String save(@Valid BoardForm boardForm, Errors errors, Model model) {
         String mode = boardForm.getMode();
-        commonProcess(model,mode != null && mode.equals("update") ? "게시판 수정" : "게시판 등록");
+        commonProcess(model, mode != null && mode.equals("update") ? "게시판 수정" : "게시판 등록");
 
         try {
-            configSaveService.save(boardForm,errors);
-
-        } catch (CommonException e){
+            configSaveService.save(boardForm, errors);
+        } catch (CommonException e) {
             errors.reject("BoardConfigError", e.getMessage());
         }
 
-
-
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "admin/board/config";
         }
 
@@ -106,28 +92,20 @@ public class BoardController {
         return "redirect:/admin/board"; // 게시판 목록
     }
 
-
-
-
-
-
-
-    private void commonProcess(Model model , String title){
+    private void commonProcess(Model model, String title) {
         String URI = request.getRequestURI();
 
         // 서브 메뉴 처리
         String subMenuCode = Menus.getSubMenuCode(request);
-        model.addAttribute("subMenuCode",subMenuCode);
+
+        subMenuCode = title.equals("게시판 수정") ? "register" : subMenuCode;
+
+        model.addAttribute("subMenuCode", subMenuCode);
 
         List<MenuDetail> submenus = Menus.gets("board");
-        model.addAttribute("submenus",submenus);
+        model.addAttribute("submenus", submenus);
 
-
-        model.addAttribute("pageTitle",title);
-        model.addAttribute("title",title);
-
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("title", title);
     }
-
-
-
 }
