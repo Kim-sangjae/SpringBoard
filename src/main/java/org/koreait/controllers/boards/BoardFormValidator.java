@@ -11,28 +11,26 @@ import org.springframework.validation.Validator;
 public class BoardFormValidator implements Validator {
 
     private final MemberUtil memberUtil;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return BoardForm.class.isAssignableFrom(clazz);
     }
 
-
     @Override
     public void validate(Object target, Errors errors) {
-        BoardForm boardForm = (BoardForm) target;
-
-        // 비회원 비밀번호 체크
-        if(!memberUtil.isLogin()){
+        BoardForm boardForm = (BoardForm)target;
+        /** 비회원 비밀번호 체크 S */
+        if (!memberUtil.isLogin()) {
             String guestPw = boardForm.getGuestPw();
-            if(guestPw == null || guestPw.isBlank()){
-                errors.rejectValue("guestPw","NotBlank");
+            if (guestPw == null || guestPw.isBlank()) {
+                errors.rejectValue("guestPw", "NotBlank");
             }
-            if(guestPw != null && guestPw.length() < 6){
-                errors.rejectValue("guestPw","Size");
+
+            if (guestPw != null && guestPw.length() < 6) {
+                errors.rejectValue("guestPw", "Size");
             }
         }
-
-
-
+        /** 비회원 비밀번호 체크 E */
     }
 }

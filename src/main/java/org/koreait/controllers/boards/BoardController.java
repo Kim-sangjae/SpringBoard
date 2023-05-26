@@ -49,10 +49,10 @@ public class BoardController {
      * @return
      */
     @GetMapping("/write/{bId}")
-    public String write(@PathVariable String bId, @ModelAttribute BoardForm boardForm , Model model) {
+    public String write(@PathVariable String bId, @ModelAttribute BoardForm boardForm, Model model) {
         commonProcess(bId, "write", model);
         boardForm.setBId(bId);
-        if(memberUtil.isLogin()){
+        if (memberUtil.isLogin()) {
             boardForm.setPoster(memberUtil.getMember().getUserNm());
         }
 
@@ -72,24 +72,23 @@ public class BoardController {
     }
 
     @PostMapping("/save")
-    public String save(@Valid BoardForm boardForm , Errors errors , Model model) {
+    public String save(@Valid BoardForm boardForm, Errors errors, Model model) {
         Long id = boardForm.getId();
-
         String mode = id == null ? "write" : "update";
         commonProcess(boardForm.getBId(), mode, model);
 
-        formValidator.validate(boardForm,errors);
+        formValidator.validate(boardForm, errors);
 
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return "board/" + mode;
         }
 
         saveService.save(boardForm);
 
-        // 작성 후 이동 설정 - 목록 , 글 보기
+        // 작성후 이동 설정 - 목록, 글보기
         String location = board.getLocationAfterWriting();
         String url = "redirect:/board/";
-        url  += location.equals("view")  ? "view/" + boardForm.getId() : "list/" + boardForm.getBId();
+        url += location.equals("view") ? "view/" + boardForm.getId() : "list/" + boardForm.getBId();
 
         return url;
     }
@@ -101,48 +100,45 @@ public class BoardController {
         return "board/view";
     }
 
-
-    private void commonProcess(String bId, String action, Model model){
+    private void commonProcess(String bId, String action, Model model) {
         /**
          * 1. bId 게시판 설정 조회
-         * 2. action - write, update - 공통 스크립트 , 공통 CSS
+         * 2. action - write, update - 공통 스크립트, 공통 CSS
          *           - 에디터 사용 -> 에디터 스크립트 추가
          *           - 에디터 미사용 -> 에디터 스크립트 미추가
-         *           - writer , list , view -> 권한 체크
+         *           - write, list, view -> 권한 체크
          *           - update - 본인이 게시글만 수정 가능
          *                    - 회원 - 회원번호
-         *                    - 비회원 - 비회원 비밀번호
+         *                    - 비회원 - 비회원비밀번호
          *                    - 관리자는 다 가능
          *
          */
 
-        board = boardConfigInfoService.get(bId,action);
+        board = boardConfigInfoService.get(bId, action);
         List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
 
         // 공통 스타일 CSS
         addCss.add("board/style");
-        addCss.add(String.format("board/%s_style",board.getSkin()));
+        addCss.add(String.format("board/%s_style", board.getSkin()));
 
-        // 글 작성 , 수정시 필요한 자바스크립트
-        if(action.equals("write") || action.equals("update")){
-            if(board.isUseEditor()){ //에디터 사용할 경우
+        // 글 작성, 수정시 필요한 자바스크립트
+        if (action.equals("write") || action.equals("update")) {
+            if (board.isUseEditor()) { // 에디터 사용 경우
                 addScript.add("ckeditor/ckeditor");
             }
             addScript.add("board/form");
         }
 
-
         // 공통 필요 속성 추가
-        model.addAttribute("board",board); // 게시판 설정 바인딩
-        model.addAttribute("addCss",addCss); // CSS 설정
-        model.addAttribute("addScript",addScript); // script 설정
+        model.addAttribute("board", board); // 게시판 설정
+        model.addAttribute("addCss", addCss); // CSS 설정
+        model.addAttribute("addScript", addScript); // JS 설정
 
     }
 
-
     @ExceptionHandler(CommonException.class)
-    public String errorHandler(CommonException e, Model model){
+    public String errorHandler(CommonException e, Model model) {
         e.printStackTrace();
 
         String message = e.getMessage();
@@ -151,9 +147,6 @@ public class BoardController {
 
         String script = String.format("alert('%s');history.back();", message);
         model.addAttribute("script", script);
-
         return "commons/execute_script";
     }
-
-
 }

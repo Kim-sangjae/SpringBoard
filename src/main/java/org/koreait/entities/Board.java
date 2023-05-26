@@ -73,8 +73,8 @@ public class Board extends BaseMemberEntity {
     // 댓글 사용 여부
     private boolean useComment;
 
+    /** 비회원 작성, 수정 모드 여부 */
     @Transient
-    // 비회원 작성 , 수정 모드 여부
     private boolean isGuest;
 
     // 게시판 스킨

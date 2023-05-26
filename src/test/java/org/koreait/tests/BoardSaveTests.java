@@ -1,6 +1,5 @@
 package org.koreait.tests;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +9,7 @@ import org.koreait.controllers.admins.ConfigForm;
 import org.koreait.controllers.boards.BoardForm;
 import org.koreait.controllers.members.JoinForm;
 import org.koreait.entities.Board;
+import org.koreait.entities.Member;
 import org.koreait.models.board.BoardDataSaveService;
 import org.koreait.models.board.BoardValidationException;
 import org.koreait.models.board.config.BoardConfigInfoService;
@@ -22,6 +22,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -29,7 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
-
+import java.util.Arrays;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations="classpath:application-test.properties")
-@DisplayName("게시글 등록, 수정테스트")
+@DisplayName("게시글 등록, 수정 테스트")
 @Transactional
 public class BoardSaveTests {
 
@@ -52,25 +54,20 @@ public class BoardSaveTests {
 
     @Autowired
     private MemberSaveService memberSaveService;
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
-    private ConfigSaveService siteconfigSaveService;
-
+    private ConfigSaveService siteConfigSaveService;
 
     private Board board;
 
     private JoinForm joinForm;
 
-
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeEach
     @Transactional
     void init() {
-        //사이트 설정 등록
-        siteconfigSaveService.save("siteConfig", new ConfigForm());
-
         // 게시판 설정 추가
         org.koreait.controllers.admins.BoardForm boardForm = new org.koreait.controllers.admins.BoardForm();
         boardForm.setBId("freetalk1000");
@@ -93,16 +90,14 @@ public class BoardSaveTests {
 
 
 
-
     private BoardForm getGuestBoardForm() {
 
         BoardForm boardForm = getCommonBoardForm();
+
         boardForm.setGuestPw("12345678");
 
         return boardForm;
-
     }
-
 
     private BoardForm getCommonBoardForm() {
         return BoardForm.builder()
@@ -123,10 +118,10 @@ public class BoardSaveTests {
             saveService.save(getGuestBoardForm());
         });
     }
-
+    
     @Test
     @DisplayName("게시글 등록(회원) 성공시 예외 없음")
-    @WithMockUser(username = "user01",password = "aA!123456")
+    @WithMockUser(username="user01", password="aA!123456")
     @Disabled
     void registerMemberSuccessTest() {
         assertDoesNotThrow(() -> {
@@ -208,27 +203,22 @@ public class BoardSaveTests {
         commonRequiredFieldsTest();
 
         assertAll(
-                ()->  assertThrows(BoardValidationException.class, () -> {
+                () -> assertThrows(BoardValidationException.class, () -> {
                     BoardForm boardForm = getGuestBoardForm();
                     boardForm.setGuestPw(null);
                     saveService.save(boardForm);
                 }),
-
                 () -> assertThrows(BoardValidationException.class, () -> {
                     BoardForm boardForm = getGuestBoardForm();
                     boardForm.setGuestPw("   ");
                     saveService.save(boardForm);
                 }),
-
                 () -> assertThrows(BoardValidationException.class, () -> {
                     BoardForm boardForm = getGuestBoardForm();
                     boardForm.setGuestPw("1234");
                     saveService.save(boardForm);
                 })
-
-                );
-
-
+        );
 
 
     }
@@ -237,30 +227,34 @@ public class BoardSaveTests {
     @DisplayName("필수 항목 검증(회원) - bId, gid, poster, subject, content, BoardValidationException 발생")
     @WithMockUser(username="user01", password="aA!123456")
     void requiredFieldsMemberTest() {
+
         commonRequiredFieldsTest();
     }
 
-
-
-
-    /**
-     * 통합 테스트
-     */
-    
-    
     @Test
     @DisplayName("통합테스트 - 비회원 게시글 작성 유효성 검사")
     @Disabled
-    void requiredFieldsGuestControllerTest() throws Exception{
+    void requiredFieldsGuestControllerTest() throws Exception {
         BoardForm boardForm = getGuestBoardForm();
+        String body = mockMvc.perform(post("/board/save")
+                    .param("bId", boardForm.getBId())
+                    .param("gid", boardForm.getGid())
+                            .with(csrf().asHeader()))
+                    .andDo(print())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
 
-        mockMvc.perform(post("/board/save")
-                .param("bId",boardForm.getBId())
-                .param("gid",boardForm.getGid())
-                .with(csrf().asHeader()))
-                .andDo(print());
+        ResourceBundle bundle = ResourceBundle.getBundle("messages.validations");
+        String[] messages = {
+            bundle.getString("NotBlank.boardForm.poster"),
+                bundle.getString("NotBlank.boardForm.subject"),
+                bundle.getString("NotBlank.boardForm.content"),
+                bundle.getString("NotBlank.boardForm.guestPw"),
+                bundle.getString("Size.boardForm.guestPw")
+        };
+        for (String message : messages) {
+            assertTrue(body.contains(message));
+        }
     }
-    
-    
-
 }

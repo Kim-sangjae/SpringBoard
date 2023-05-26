@@ -40,9 +40,6 @@ public class BoardConfigInfoService {
         return board;
     }
 
-
-
-
     public Board get(String bId, boolean isAdmin) {
         return get(bId, isAdmin, null);
     }
@@ -64,7 +61,7 @@ public class BoardConfigInfoService {
             role = board.getWriteAccessRole();
 
             /** 비회원 게시글 여부 */
-            if(!memberUtil.isLogin()) board.setGuest(true);
+            if (!memberUtil.isLogin()) board.setGuest(true);
 
         } else if (location.equals("reply")) { // 답글 권한
             role = board.getReplyAccessRole();
@@ -78,9 +75,6 @@ public class BoardConfigInfoService {
                 || (role == Role.ADMIN && !memberUtil.isAdmin())) {
             throw new BoardNotAllowAccessException();
         }
-
-
-
 
 
     }

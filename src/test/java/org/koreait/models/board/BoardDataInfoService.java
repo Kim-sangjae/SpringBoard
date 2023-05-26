@@ -2,18 +2,20 @@ package org.koreait.models.board;
 
 import lombok.RequiredArgsConstructor;
 import org.koreait.entities.BoardData;
+import org.koreait.repositories.BoardDataRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BoardDataInfoService {
 
-    public BoardData get(Long id){
+    private final BoardDataRepository boardDataRepository;
+
+    public BoardData get(Long id) {
+
+        BoardData boardData = boardDataRepository.findById(id).orElseThrow(BoardDataNotExistsException::new);
+
 
         return null;
     }
-
-
-
-
 }
