@@ -105,7 +105,9 @@
 
 ## 10일차 
 * 프론트페이지 
-	-게시글 보기
-	- 파일업로드
+	- 게시글 보기
+	- 조회수 수현
+  		- IP + 브라우저정보(UserAgent)
+      - 파일업로드
 	
 * <a href="https://drive.google.com/drive/folders/1nRs2vpJZgz-EA9v4tg-xSyI6AdpkKZ1y?usp=drive_link">동영상 강의</a>
